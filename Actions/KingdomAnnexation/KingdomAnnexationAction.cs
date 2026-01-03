@@ -61,6 +61,45 @@ namespace KingdomAnnexation.Actions.KingdomAnnexation
             }
         }
 
+        public static void ApplyForce(Kingdom annexedKingdom, Kingdom annexingKingdom, bool showNotification = true)
+        {
+            var annexingLeader = annexingKingdom.Leader;
+            List<Clan> annexedClans = new List<Clan>(annexedKingdom.Clans);
+            List<Clan> vassalClans = new List<Clan>(annexedKingdom.VassalClans());
+
+            if (annexingKingdom.Leader == null ||
+                annexingKingdom.RulingClan == null ||
+                annexedKingdom.Leader == null ||
+                annexedKingdom.RulingClan == null) return;
+
+            var oldRulerName = annexedKingdom.Leader.Name;
+
+            HandleAllVassalsAsCollaborators(annexingKingdom, vassalClans);
+            HandleNonVassalClans(annexedKingdom, annexingKingdom, showNotification, annexedClans);
+            MakePeace(annexedKingdom, annexingKingdom);
+            DestroyOldKingdom(annexedKingdom, annexingKingdom, annexingLeader);
+
+            if (showNotification)
+            {
+                MBInformationManager.AddQuickInformation(new TextObject(
+                    $"{annexingKingdom} annexed {annexedKingdom}. {oldRulerName} and {vassalClans.Count} out of {vassalClans.Count} vassal clans decided to collaborate.")
+                );
+            }
+        }
+
+        private static void HandleAllVassalsAsCollaborators(Kingdom annexingKingdom, List<Clan> vassalClans)
+        {
+            for (var i = 0; i < vassalClans.Count; i++)
+            {
+                var clan = vassalClans[i];
+                ChangeKingdomAction.ApplyByJoinToKingdom(
+                    clan: clan,
+                    newKingdom: annexingKingdom,
+                    showNotification: false
+                );
+            }
+        }
+
         private static void DestroyOldKingdom(Kingdom annexedKingdom, Kingdom annexingKingdom, Hero annexingLeader)
         {
             if (annexingLeader.Clan?.Kingdom != annexedKingdom)

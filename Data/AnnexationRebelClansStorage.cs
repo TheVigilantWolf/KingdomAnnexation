@@ -9,7 +9,7 @@ namespace KingdomAnnexation.Data
 {
     public class AnnexationRebelClansStorage
     {
-        public static AnnexationRebelClansStorage? Instance { get; private set; }
+        public static AnnexationRebelClansStorage Instance { get; private set; }
 
         [SaveableProperty(1)]
         [UsedImplicitly]

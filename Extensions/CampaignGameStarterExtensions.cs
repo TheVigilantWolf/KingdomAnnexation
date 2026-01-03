@@ -13,11 +13,11 @@ namespace KingdomAnnexation.Extensions
             string inputToken,
             string outputToken,
             string text,
-            ConversationSentence.OnConditionDelegate? condition = null,
-            ConversationSentence.OnConsequenceDelegate? consequence = null,
+            ConversationSentence.OnConditionDelegate condition = null,
+            ConversationSentence.OnConsequenceDelegate consequence = null,
             int priority = 100,
-            ConversationSentence.OnClickableConditionDelegate? clickableCondition = null,
-            ConversationSentence.OnPersuasionOptionDelegate? persuasion = null)
+            ConversationSentence.OnClickableConditionDelegate clickableCondition = null,
+            ConversationSentence.OnPersuasionOptionDelegate persuasion = null)
         {
             return starter.AddPlayerLine(
                 id, inputToken, outputToken, text, condition, consequence, priority, clickableCondition, persuasion
@@ -30,10 +30,10 @@ namespace KingdomAnnexation.Extensions
             string inputToken,
             string outputToken,
             string text,
-            ConversationSentence.OnConditionDelegate? condition = null,
-            ConversationSentence.OnConsequenceDelegate? consequence = null,
+            ConversationSentence.OnConditionDelegate condition = null,
+            ConversationSentence.OnConsequenceDelegate consequence = null,
             int priority = 100,
-            ConversationSentence.OnClickableConditionDelegate? clickableCondition = null)
+            ConversationSentence.OnClickableConditionDelegate clickableCondition = null)
         {
             return starter.AddDialogLine(
                 id, inputToken, outputToken, text, condition, consequence, priority, clickableCondition

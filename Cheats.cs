@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using KingdomAnnexation.Actions.KingdomAnnexation;
 using KingdomAnnexation.Data;
 using KingdomAnnexation.Extensions;
 using JetBrains.Annotations;
@@ -18,6 +19,43 @@ namespace KingdomAnnexation
         private const string VassalizeClanInfo =
             "You need to provide kingdom name and clan name as a parameters (spaces are ignored): 'annexation.vassalize_clan [kingdom] [clan]'.";
 
+        private const string AnnexInfo =
+            "You need to provide annexing kingdom and annexed kingdom as parameters (spaces are ignored): 'annexation.annex [annexing_kingdom] [annexed_kingdom]'.";
+
+        [CommandLineFunctionality.CommandLineArgumentFunction("annex", "annexation")]
+        [UsedImplicitly]
+        public static string Annex(List<string> strings)
+        {
+            if (strings.Count < 2)
+            {
+                return AnnexInfo;
+            }
+
+            var annexingKingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(k =>
+                k.Name.ToString().ToLower().Replace(" ", "") == strings[0]
+            );
+            if (annexingKingdom == null)
+            {
+                return $"Couldn't find annexing kingdom with {strings[0]} name. {AnnexInfo}";
+            }
+
+            var annexedKingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(k =>
+                k.Name.ToString().ToLower().Replace(" ", "") == strings[1]
+            );
+            if (annexedKingdom == null)
+            {
+                return $"Couldn't find annexed kingdom with {strings[1]} name. {AnnexInfo}";
+            }
+
+            if (annexedKingdom == annexingKingdom)
+            {
+                return "Annexing kingdom and annexed kingdom are the same.";
+            }
+
+            KingdomAnnexationAction.ApplyForce(annexedKingdom, annexingKingdom, showNotification: false);
+            return $"{annexingKingdom.Name} annexed {annexedKingdom.Name}.";
+        }
+
         [CommandLineFunctionality.CommandLineArgumentFunction("vassalize_all_rebels", "annexation")]
         [UsedImplicitly]
         public static string VassalizeAllRebels(List<string> strings)
@@ -27,18 +65,17 @@ namespace KingdomAnnexation
                 return VassalizeAllRebelsInfo;
             }
 
-            var kingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(kingdom =>
-                kingdom.Name.ToString().ToLower().Replace(" ", "") == strings[0]
-            );
+            var kingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(k =>
+                k.Name.ToString().ToLower().Replace(" ", "") == strings[0]);
             if (kingdom == null)
             {
                 return $"Couldn't find kingdom with {strings[0]} name. {VassalizeAllRebelsInfo}";
             }
 
             var kingdomlessClans =
-                Clan.All.Where(clan =>
-                        !clan.IsEliminated &&
-                        AnnexationRebelClansStorage.Instance?.IsRebelClanAgainstAnnexingKingdom(clan, kingdom) == true
+                Clan.All.Where(c =>
+                        !c.IsEliminated &&
+                        AnnexationRebelClansStorage.Instance?.IsRebelClanAgainstAnnexingKingdom(c, kingdom) == true
                     )
                     .ToList();
             foreach (var clan in kingdomlessClans)
@@ -62,17 +99,15 @@ namespace KingdomAnnexation
                 return VassalizeClanInfo;
             }
 
-            var kingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(kingdom =>
-                kingdom.Name.ToString().ToLower().Replace(" ", "") == strings[0]
-            );
+            var kingdom = KingdomExtensions.AllActiveKingdomsFactions().Find(k =>
+                k.Name.ToString().ToLower().Replace(" ", "") == strings[0]);
             if (kingdom == null)
             {
                 return $"Couldn't find kingdom with {strings[0]} name. {VassalizeClanInfo}";
             }
 
-            var clan = Clan.All.ToList().Find(clan =>
-                clan.Name.ToString().ToLower().Replace(" ", "") == strings[1]
-            );
+            var clan = Clan.All.ToList().Find(c =>
+                c.Name.ToString().ToLower().Replace(" ", "") == strings[1]);
             if (clan == null)
             {
                 return $"Couldn't find clan with {strings[1]} name. {VassalizeClanInfo}";

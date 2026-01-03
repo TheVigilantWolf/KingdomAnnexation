@@ -22,7 +22,11 @@ namespace KingdomAnnexation.CampaignBehaviors
 
             if (dataStore.IsLoading)
             {
-                _annexationRebelClansStorage ??= new AnnexationRebelClansStorage();
+                if (_annexationRebelClansStorage == null)
+                {
+                    _annexationRebelClansStorage = new AnnexationRebelClansStorage();
+                }
+
                 _annexationRebelClansStorage.Sync();
             }
         }

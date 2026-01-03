@@ -10,7 +10,7 @@ namespace KingdomAnnexation.Shared
     internal class Settings : AttributeGlobalSettings<Settings>
     {
         private const string GroupNameAnnexationConditions = "Annexation conditions";
-        private const int DefaultAnnexedKingdomMaxFiefsAmounts = 0;
+        private const int DefaultAnnexedKingdomMaxFiefsAmounts = 1;
         private const float DefaultAnnexedKingdomMaxStrengthRatio = .25f;
         private const float DefaultAnnexingKingdomMinCultureFiefsPercentage = .4f;
         private const string GroupNameReducedExecutionRelationshipPenalty = "Reduced rebel execution relationship penalty";
@@ -29,7 +29,7 @@ namespace KingdomAnnexation.Shared
             minValue: 0,
             maxValue: 5,
             Order = 0,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText = "Kingdom can be annexed only if it has less fiefs than configured by this value"
         )]
         [SettingPropertyGroup(GroupNameAnnexationConditions)]
@@ -44,7 +44,7 @@ namespace KingdomAnnexation.Shared
             maxValue: .5f,
             valueFormat: "0%",
             Order = 1,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Kingdom can be annexed only if it it's total strength divided by your annexing kingdom strength is smaller than this value"
         )]
@@ -61,7 +61,7 @@ namespace KingdomAnnexation.Shared
             maxValue: 1f,
             valueFormat: "0%",
             Order = 2,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Kingdom can annex other kingdom only if percentage of fiefs that have annexed kingdom's culture controlled by this annexing kingdom is at least as big as this value"
         )]
@@ -79,7 +79,7 @@ namespace KingdomAnnexation.Shared
             minValue: 1,
             maxValue: 10,
             Order = 3,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Relation penalty with nobles of annexing kingdom after executing rebel nobles of annexed kingdom will be divided by this number"
         )]
@@ -96,7 +96,7 @@ namespace KingdomAnnexation.Shared
             minValue: 1,
             maxValue: 10,
             Order = 4,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Relation penalty with nobles of other kingdoms after executing rebel nobles of annexed kingdom will be divided by this number"
         )]
@@ -114,7 +114,7 @@ namespace KingdomAnnexation.Shared
             maxValue: 1f,
             valueFormat: "0%",
             Order = 5,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Minimum chance of vassal clans of annexed kingdom to join your kingdom after annexation (doesn't apply to ruler which will always join and mercenaries that will just terminate their contract)."
         )]
@@ -131,7 +131,7 @@ namespace KingdomAnnexation.Shared
             maxValue: 1f,
             valueFormat: "0%",
             Order = 6,
-            RequireRestart: false,
+            RequireRestart = false,
             HintText =
                 "Maximum chance of vassal clans of annexed kingdom to join your kingdom after annexation - the better your relations with lords of the kingdom are, the higher the chance they will join you. This value will be ignored if it's lower than minimum one."
         )]

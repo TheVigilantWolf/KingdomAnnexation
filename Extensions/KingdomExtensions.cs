@@ -18,7 +18,13 @@ namespace KingdomAnnexation.Extensions
 
         public static int KingdomsStrengthRatio(Kingdom kingdom, Kingdom other)
         {
-            var strengthRatio = (int)(kingdom.TotalStrength * 100 / other.TotalStrength);
+            var otherStrength = other.CurrentTotalStrength;
+            if (otherStrength <= 0f)
+            {
+                return 0;
+            }
+
+            var strengthRatio = (int)(kingdom.CurrentTotalStrength * 100f / otherStrength);
             return strengthRatio;
         }
     }

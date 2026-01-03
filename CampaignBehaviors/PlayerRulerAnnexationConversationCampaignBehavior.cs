@@ -1,4 +1,5 @@
-﻿using KingdomAnnexation.Actions.KingdomAnnexation;
+﻿using Helpers;
+using KingdomAnnexation.Actions.KingdomAnnexation;
 using KingdomAnnexation.Conditions;
 using KingdomAnnexation.Extensions;
 using KingdomAnnexation.Shared;
@@ -35,7 +36,7 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_demand",
                 inputToken: NativeGameTokens.HeroMainOptions,
                 outputToken: AnnexationRequestedToken,
-                text: "I demand you and {HERO_KINGDOM} to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
+                text: "{HERO_NAME}, the {HERO_KINGDOM} is but a shadow beside the {PLAYER_KINGDOM}. Bend the knee, swear fealty, and I will grant you amnesty and keep your lands in peace under my law.",
                 condition: PlayerIsRulerAndHeroIsRulerCondition
             );
             starter.AddDialogLine(
@@ -48,7 +49,7 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_strength",
                 inputToken: FirstReasonToken,
                 outputToken: AfterFirstReasonToken,
-                text: "{PLAYER_KINGDOM} is far stronger than {HERO_KINGDOM}.",
+                text: "The {HERO_KINGDOM} cannot stand against me, you know this to be true.",
                 clickableCondition: HeroKingdomStrengthClickableCondition
             );
             starter.AddPlayerLine(
@@ -61,13 +62,13 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_ask_second_reason",
                 inputToken: AfterFirstReasonToken,
                 outputToken: SecondReasonToken,
-                text: "That's true, but I would need more reasons for that kind of decision."
+                text: "I do know that to be true, but I would need more reasons for that kind of decision."
             );
             starter.AddPlayerLine(
                 id: "annexation_low_fiefs",
                 inputToken: SecondReasonToken,
                 outputToken: AfterSecondReasonToken,
-                text: "{HERO_KINGDOM} {LOW_FIEFS_DESCRIPTION}.",
+                text: "The {HERO_KINGDOM} {LOW_FIEFS_DESCRIPTION}.",
                 clickableCondition: HeroKingdomLowFiefsClickableCondition
             );
             starter.AddPlayerLine(
@@ -80,13 +81,13 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_ask_third_reason",
                 inputToken: AfterSecondReasonToken,
                 outputToken: ThirdReasonToken,
-                text: "But why should YOU be the one to rule {HERO_KINGDOM_CULTURE} people?"
+                text: "But why should YOU be the one to rule the {HERO_KINGDOM_CULTURE} people?"
             );
             starter.AddPlayerLine(
                 id: "annexation_fiefs_control",
                 inputToken: ThirdReasonToken,
                 outputToken: AfterThirdReasonToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "The {PLAYER_KINGDOM} is controlling big part of the {HERO_KINGDOM_CULTURE} lands.",
                 condition: PlayerAnyTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
@@ -94,7 +95,7 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_fiefs_control_no_traits",
                 inputToken: ThirdReasonToken,
                 outputToken: OathStartToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "The {PLAYER_KINGDOM} is controlling a big part of the {HERO_KINGDOM_CULTURE} lands.",
                 condition: PlayerNoTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
@@ -113,28 +114,28 @@ namespace KingdomAnnexation.CampaignBehaviors
                 id: "annexation_honor",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "You can trust my word - I will be taking care of the {HERO_KINGDOM_CULTURE}.",
+                text: "Trust my word, I will take care of the {HERO_KINGDOM_CULTURE} people.",
                 condition: PlayerTraitCondition.Honorable
             );
             starter.AddPlayerLine(
                 id: "annexation_cruel",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "If you don't recognize my authority I will kill you and all your supporters.",
+                text: "If you don't recognize my authority I will crush you and all your supporters.",
                 condition: PlayerTraitCondition.Cruel
             );
             starter.AddPlayerLine(
                 id: "annexation_generous",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "I will generously reward everyone who will be faithful to me.",
+                text: "I will generously reward everyone all those faithful to me.",
                 condition: PlayerTraitCondition.Generous
             );
             starter.AddPlayerLine(
                 id: "annexation_fearless",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "Many times I have shown my value as a fearless leader on the battlefields.",
+                text: "Many times I have shown my value as a fearless leader on the battlefield.",
                 condition: PlayerTraitCondition.Fearless
             );
             starter.AddPlayerLine(
@@ -148,7 +149,7 @@ namespace KingdomAnnexation.CampaignBehaviors
                 inputToken: OathStartToken,
                 outputToken: "annexation_oath_2",
                 text:
-                "This is hard decision, but after considering all circumstances that's the only thing that I can do."
+                "This is hard decision, but after considering all circumstances it's the only thing that I can do..."
             );
             starter.AddDialogLine(
                 id: "annexation_oath_text_2",
@@ -179,13 +180,16 @@ namespace KingdomAnnexation.CampaignBehaviors
             var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
             var playerKingdom = Hero.MainHero.Clan?.Kingdom;
             if (heroKingdom == null || playerKingdom == null) return;
+
+            MBTextManager.SetTextVariable("HERO_NAME", Hero.OneToOneConversationHero.Name);
+
             var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "does not control any fiefs" : "controls very few fiefs";
             MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText());
             MBTextManager.SetTextVariable("PLAYER_KINGDOM", playerKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM", heroKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM_CULTURE", heroKingdom.Culture.Name);
             MBTextManager.SetTextVariable("LOW_FIEFS_DESCRIPTION", lowFiefsDescription);
-            
+
         }
 
         private static bool PlayerNoTraitsCondition()
@@ -209,7 +213,7 @@ namespace KingdomAnnexation.CampaignBehaviors
             );
         }
 
-        private static bool HeroKingdomStrengthClickableCondition(out TextObject? explanation)
+        private static bool HeroKingdomStrengthClickableCondition(out TextObject explanation)
         {
             var heroKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
             var playerKingdom = Hero.MainHero?.Clan?.Kingdom;
@@ -226,7 +230,7 @@ namespace KingdomAnnexation.CampaignBehaviors
             return enoughStrengthAdvantage;
         }
 
-        private static bool PlayerControllingCultureTownsClickableCondition(out TextObject? explanation)
+        private static bool PlayerControllingCultureTownsClickableCondition(out TextObject explanation)
         {
             explanation = null;
             var controllingEnoughFiefs = KingdomAnnexationCondition.ControllingEnoughCultureLands(
@@ -237,7 +241,7 @@ namespace KingdomAnnexation.CampaignBehaviors
             );
             if (!controllingEnoughFiefs)
             {
-                var cultureName = Hero.OneToOneConversationHero?.Clan?.Kingdom?.Culture?.Name ?? TextObject.Empty;
+                var cultureName = Hero.OneToOneConversationHero?.Clan?.Kingdom?.Culture?.Name ?? new TextObject(string.Empty);
                 explanation = new TextObject(
                     $"You are controlling {playerControlledHeroCultureFiefsPercentage}% of {cultureName} fiefs ({requiredFiefsPercentage}% required)."
                 );
@@ -246,7 +250,7 @@ namespace KingdomAnnexation.CampaignBehaviors
             return controllingEnoughFiefs;
         }
 
-        private static bool HeroKingdomLowFiefsClickableCondition(out TextObject? explanation)
+        private static bool HeroKingdomLowFiefsClickableCondition(out TextObject explanation)
         {
             var heroKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
             explanation = null;

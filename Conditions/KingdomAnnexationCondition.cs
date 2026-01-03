@@ -7,8 +7,8 @@ namespace KingdomAnnexation.Conditions
     public static class KingdomAnnexationCondition
     {
         public static bool ControllingEnoughCultureLands(
-            Kingdom? annexingKingdom,
-            Kingdom? annexedKingdom
+            Kingdom annexingKingdom,
+            Kingdom annexedKingdom
         )
         {
             return ControllingEnoughCultureLands(
@@ -20,8 +20,8 @@ namespace KingdomAnnexation.Conditions
         }
 
         public static bool ControllingEnoughCultureLands(
-            Kingdom? annexingKingdom,
-            Kingdom? annexedKingdom,
+            Kingdom annexingKingdom,
+            Kingdom annexedKingdom,
             out int controlledFiefsPercentage,
             out int requiredFiefsPercentage
         )
