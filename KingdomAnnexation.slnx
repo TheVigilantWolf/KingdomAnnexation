@@ -3,7 +3,7 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="KingdomAnnexation.csproj">
+  <Project Path="KingdomAnnexation.csproj" Id="7630ebab-325c-4310-b94f-904b3cbac2c7">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
 </Solution>
