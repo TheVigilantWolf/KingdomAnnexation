@@ -14,13 +14,13 @@ namespace KingdomAnnexation
     public class Cheats
     {
         private const string VassalizeAllRebelsInfo =
-            "You need to provide kingdom name as a parameter (spaces are ignored): 'annexation.vassalize_all_rebels [kingdom]'.";
+            "Ensure you are using no spaces or caps: 'annexation.vassalize_all_rebels [kingdom]'.";
 
         private const string VassalizeClanInfo =
-            "You need to provide kingdom name and clan name as a parameters (spaces are ignored): 'annexation.vassalize_clan [kingdom] [clan]'.";
+            "Ensure you are using no spaces or caps: 'annexation.vassalize_clan [kingdom] [clan]'.";
 
         private const string AnnexInfo =
-            "You need to provide annexing kingdom and annexed kingdom as parameters (spaces are ignored): 'annexation.annex [annexing_kingdom] [annexed_kingdom]'.";
+            "Ensure you are using no spaces or caps: 'annexation.annex [annexingkingdom] [annexedkingdom]'.";
 
         [CommandLineFunctionality.CommandLineArgumentFunction("annex", "annexation")]
         [UsedImplicitly]

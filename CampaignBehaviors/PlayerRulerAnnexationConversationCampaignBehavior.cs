@@ -269,8 +269,13 @@ namespace KingdomAnnexation.CampaignBehaviors
 
         private static bool PlayerIsRulerAndHeroIsRulerCondition()
         {
+            var playerKingdom = Hero.MainHero.Clan?.Kingdom;
+            var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
             var areRulers = Hero.OneToOneConversationHero.IsRulerOfKingdom()
-                            && Hero.MainHero.IsRulerOfKingdom();
+                            && Hero.MainHero.IsRulerOfKingdom()
+                            && heroKingdom != null
+                            && playerKingdom != null
+                            && heroKingdom != playerKingdom;
             if (areRulers) SetTextVariables();
             return areRulers;
         }

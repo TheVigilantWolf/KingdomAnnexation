@@ -20,6 +20,7 @@ namespace KingdomAnnexation.Actions.KingdomAnnexation
             var annexedKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
             var annexingKingdom = Hero.MainHero?.Clan?.Kingdom;
             if (annexingKingdom == null || annexedKingdom == null) return;
+            if (annexedKingdom == annexingKingdom) return;
             Apply(annexedKingdom, annexingKingdom);
         }
 
@@ -105,7 +106,6 @@ namespace KingdomAnnexation.Actions.KingdomAnnexation
             if (annexingLeader.Clan?.Kingdom != annexedKingdom)
             {
                 DestroyKingdomAction.Apply(annexedKingdom);
-                annexedKingdom.RulingClan = annexingKingdom.RulingClan;
             }
         }
 
